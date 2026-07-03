@@ -1,0 +1,900 @@
+﻿databaseChangeLog:
+
+  # â”€â”€ coach_affiliated_venues â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  - changeSet:
+      id: 008-01-create-coach-affiliated-venues
+      author: Chiranjeevi D
+      preConditions:
+        onFail: MARK_RAN
+        not:
+          - tableExists:
+              tableName: coach_affiliated_venues
+      changes:
+        - createTable:
+            tableName: coach_affiliated_venues
+            columns:
+              - column:
+                  name: id
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: coach_id
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: venue_ref_id
+                  type: VARCHAR(100)
+              - column:
+                  name: name
+                  type: VARCHAR(150)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: address
+                  type: VARCHAR(255)
+              - column:
+                  name: area
+                  type: VARCHAR(100)
+              - column:
+                  name: city
+                  type: VARCHAR(100)
+              - column:
+                  name: latitude
+                  type: DOUBLE PRECISION
+              - column:
+                  name: longitude
+                  type: DOUBLE PRECISION
+              - column:
+                  name: relationship
+                  type: VARCHAR(30)
+              - column:
+                  name: is_primary
+                  type: BOOLEAN
+                  defaultValueBoolean: false
+        - addForeignKeyConstraint:
+            baseTableName: coach_affiliated_venues
+            baseColumnNames: coach_id
+            referencedTableName: coaches
+            referencedColumnNames: id
+            constraintName: fk_coach_affiliated_venues_coach
+            onDelete: CASCADE
+
+  # â”€â”€ coach_achievements â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  - changeSet:
+      id: 008-02-create-coach-achievements
+      author: Chiranjeevi D
+      preConditions:
+        onFail: MARK_RAN
+        not:
+          - tableExists:
+              tableName: coach_achievements
+      changes:
+        - createTable:
+            tableName: coach_achievements
+            columns:
+              - column:
+                  name: id
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: coach_id
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: achievement_type
+                  type: VARCHAR(20)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: title
+                  type: VARCHAR(200)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: organization
+                  type: VARCHAR(150)
+              - column:
+                  name: year
+                  type: INTEGER
+              - column:
+                  name: description
+                  type: TEXT
+              - column:
+                  name: proof_uri
+                  type: VARCHAR(500)
+              - column:
+                  name: proof_type
+                  type: VARCHAR(20)
+              - column:
+                  name: is_verified
+                  type: BOOLEAN
+                  defaultValueBoolean: false
+        - addForeignKeyConstraint:
+            baseTableName: coach_achievements
+            baseColumnNames: coach_id
+            referencedTableName: coaches
+            referencedColumnNames: id
+            constraintName: fk_coach_achievements_coach
+            onDelete: CASCADE
+
+  # â”€â”€ coach_press_mentions â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  - changeSet:
+      id: 008-03-create-coach-press-mentions
+      author: Chiranjeevi D
+      preConditions:
+        onFail: MARK_RAN
+        not:
+          - tableExists:
+              tableName: coach_press_mentions
+      changes:
+        - createTable:
+            tableName: coach_press_mentions
+            columns:
+              - column:
+                  name: id
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: coach_id
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: title
+                  type: VARCHAR(200)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: publication
+                  type: VARCHAR(150)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: url
+                  type: VARCHAR(1000)
+              - column:
+                  name: date
+                  type: DATE
+        - addForeignKeyConstraint:
+            baseTableName: coach_press_mentions
+            baseColumnNames: coach_id
+            referencedTableName: coaches
+            referencedColumnNames: id
+            constraintName: fk_coach_press_mentions_coach
+            onDelete: CASCADE
+
+  # â”€â”€ coach_notable_students â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  - changeSet:
+      id: 008-04-create-coach-notable-students
+      author: Chiranjeevi D
+      preConditions:
+        onFail: MARK_RAN
+        not:
+          - tableExists:
+              tableName: coach_notable_students
+      changes:
+        - createTable:
+            tableName: coach_notable_students
+            columns:
+              - column:
+                  name: id
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: coach_id
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: name
+                  type: VARCHAR(100)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: achievement
+                  type: VARCHAR(300)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: year
+                  type: INTEGER
+              - column:
+                  name: has_consent
+                  type: BOOLEAN
+                  defaultValueBoolean: false
+        - addForeignKeyConstraint:
+            baseTableName: coach_notable_students
+            baseColumnNames: coach_id
+            referencedTableName: coaches
+            referencedColumnNames: id
+            constraintName: fk_coach_notable_students_coach
+            onDelete: CASCADE
+
+  # â”€â”€ coach_certifications â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  - changeSet:
+      id: 008-05-create-coach-certifications
+      author: Chiranjeevi D
+      preConditions:
+        onFail: MARK_RAN
+        not:
+          - tableExists:
+              tableName: coach_certifications
+      changes:
+        - createTable:
+            tableName: coach_certifications
+            columns:
+              - column:
+                  name: id
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: coach_id
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: catalog_id
+                  type: VARCHAR(100)
+              - column:
+                  name: name
+                  type: VARCHAR(200)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: organization
+                  type: VARCHAR(150)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: level
+                  type: VARCHAR(20)
+              - column:
+                  name: year_obtained
+                  type: INTEGER
+              - column:
+                  name: expires_at
+                  type: DATE
+              - column:
+                  name: certificate_number
+                  type: VARCHAR(100)
+              - column:
+                  name: document_uri
+                  type: VARCHAR(500)
+              - column:
+                  name: is_verified
+                  type: BOOLEAN
+                  defaultValueBoolean: false
+              - column:
+                  name: verified_at
+                  type: TIMESTAMP WITH TIME ZONE
+        - addForeignKeyConstraint:
+            baseTableName: coach_certifications
+            baseColumnNames: coach_id
+            referencedTableName: coaches
+            referencedColumnNames: id
+            constraintName: fk_coach_certifications_coach
+            onDelete: CASCADE
+
+  # â”€â”€ coach_educations â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  - changeSet:
+      id: 008-06-create-coach-educations
+      author: Chiranjeevi D
+      preConditions:
+        onFail: MARK_RAN
+        not:
+          - tableExists:
+              tableName: coach_educations
+      changes:
+        - createTable:
+            tableName: coach_educations
+            columns:
+              - column:
+                  name: id
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: coach_id
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: qualification
+                  type: VARCHAR(200)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: institution
+                  type: VARCHAR(200)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: year
+                  type: INTEGER
+              - column:
+                  name: document_uri
+                  type: VARCHAR(500)
+        - addForeignKeyConstraint:
+            baseTableName: coach_educations
+            baseColumnNames: coach_id
+            referencedTableName: coaches
+            referencedColumnNames: id
+            constraintName: fk_coach_educations_coach
+            onDelete: CASCADE
+
+  # â”€â”€ coach_programs â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  - changeSet:
+      id: 008-07-create-coach-programs
+      author: Chiranjeevi D
+      preConditions:
+        onFail: MARK_RAN
+        not:
+          - tableExists:
+              tableName: coach_programs
+      changes:
+        - createTable:
+            tableName: coach_programs
+            columns:
+              - column:
+                  name: id
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: coach_id
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: name
+                  type: VARCHAR(150)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: format
+                  type: VARCHAR(20)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: description
+                  type: TEXT
+              - column:
+                  name: duration_minutes
+                  type: INTEGER
+              - column:
+                  name: capacity
+                  type: INTEGER
+              - column:
+                  name: sport_id
+                  type: BIGINT
+              - column:
+                  name: price_per_unit
+                  type: DECIMAL(10, 2)
+              - column:
+                  name: frequency
+                  type: VARCHAR(20)
+              - column:
+                  name: total_sessions
+                  type: INTEGER
+              - column:
+                  name: camp_start_date
+                  type: DATE
+              - column:
+                  name: camp_end_date
+                  type: DATE
+              - column:
+                  name: is_trial
+                  type: BOOLEAN
+                  defaultValueBoolean: false
+              - column:
+                  name: first_time_discount_pct
+                  type: INTEGER
+              - column:
+                  name: cancellation_policy
+                  type: VARCHAR(20)
+              - column:
+                  name: is_active
+                  type: BOOLEAN
+                  defaultValueBoolean: true
+              - column:
+                  name: display_order
+                  type: INTEGER
+                  defaultValueNumeric: 0
+              - column:
+                  name: created_date
+                  type: TIMESTAMP WITH TIME ZONE
+                  constraints:
+                    nullable: false
+              - column:
+                  name: updated_date
+                  type: TIMESTAMP WITH TIME ZONE
+        - addForeignKeyConstraint:
+            baseTableName: coach_programs
+            baseColumnNames: coach_id
+            referencedTableName: coaches
+            referencedColumnNames: id
+            constraintName: fk_coach_programs_coach
+            onDelete: CASCADE
+        - addForeignKeyConstraint:
+            baseTableName: coach_programs
+            baseColumnNames: sport_id
+            referencedTableName: sports
+            referencedColumnNames: id
+            constraintName: fk_coach_programs_sport
+            onDelete: SET NULL
+
+  # â”€â”€ coach_program_skill_levels â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  - changeSet:
+      id: 008-08-create-coach-program-skill-levels
+      author: Chiranjeevi D
+      preConditions:
+        onFail: MARK_RAN
+        not:
+          - tableExists:
+              tableName: coach_program_skill_levels
+      changes:
+        - createTable:
+            tableName: coach_program_skill_levels
+            columns:
+              - column:
+                  name: program_id
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: skill_level
+                  type: VARCHAR(20)
+        - addForeignKeyConstraint:
+            baseTableName: coach_program_skill_levels
+            baseColumnNames: program_id
+            referencedTableName: coach_programs
+            referencedColumnNames: id
+            constraintName: fk_coach_program_skill_levels_program
+            onDelete: CASCADE
+
+  # â”€â”€ coach_program_age_groups â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  - changeSet:
+      id: 008-09-create-coach-program-age-groups
+      author: Chiranjeevi D
+      preConditions:
+        onFail: MARK_RAN
+        not:
+          - tableExists:
+              tableName: coach_program_age_groups
+      changes:
+        - createTable:
+            tableName: coach_program_age_groups
+            columns:
+              - column:
+                  name: program_id
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: age_group
+                  type: VARCHAR(20)
+        - addForeignKeyConstraint:
+            baseTableName: coach_program_age_groups
+            baseColumnNames: program_id
+            referencedTableName: coach_programs
+            referencedColumnNames: id
+            constraintName: fk_coach_program_age_groups_program
+            onDelete: CASCADE
+
+  # â”€â”€ coach_program_inclusions â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  - changeSet:
+      id: 008-10-create-coach-program-inclusions
+      author: Chiranjeevi D
+      preConditions:
+        onFail: MARK_RAN
+        not:
+          - tableExists:
+              tableName: coach_program_inclusions
+      changes:
+        - createTable:
+            tableName: coach_program_inclusions
+            columns:
+              - column:
+                  name: program_id
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: inclusion
+                  type: VARCHAR(200)
+              - column:
+                  name: sort_order
+                  type: INTEGER
+        - addForeignKeyConstraint:
+            baseTableName: coach_program_inclusions
+            baseColumnNames: program_id
+            referencedTableName: coach_programs
+            referencedColumnNames: id
+            constraintName: fk_coach_program_inclusions_program
+            onDelete: CASCADE
+
+  # â”€â”€ coach_program_exclusions â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  - changeSet:
+      id: 008-11-create-coach-program-exclusions
+      author: Chiranjeevi D
+      preConditions:
+        onFail: MARK_RAN
+        not:
+          - tableExists:
+              tableName: coach_program_exclusions
+      changes:
+        - createTable:
+            tableName: coach_program_exclusions
+            columns:
+              - column:
+                  name: program_id
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: exclusion
+                  type: VARCHAR(200)
+              - column:
+                  name: sort_order
+                  type: INTEGER
+        - addForeignKeyConstraint:
+            baseTableName: coach_program_exclusions
+            baseColumnNames: program_id
+            referencedTableName: coach_programs
+            referencedColumnNames: id
+            constraintName: fk_coach_program_exclusions_program
+            onDelete: CASCADE
+
+  # â”€â”€ coach_program_photos â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  - changeSet:
+      id: 008-12-create-coach-program-photos
+      author: Chiranjeevi D
+      preConditions:
+        onFail: MARK_RAN
+        not:
+          - tableExists:
+              tableName: coach_program_photos
+      changes:
+        - createTable:
+            tableName: coach_program_photos
+            columns:
+              - column:
+                  name: program_id
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: photo_url
+                  type: VARCHAR(500)
+              - column:
+                  name: sort_order
+                  type: INTEGER
+        - addForeignKeyConstraint:
+            baseTableName: coach_program_photos
+            baseColumnNames: program_id
+            referencedTableName: coach_programs
+            referencedColumnNames: id
+            constraintName: fk_coach_program_photos_program
+            onDelete: CASCADE
+
+  # â”€â”€ coach_weekly_slots â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  - changeSet:
+      id: 008-13-create-coach-weekly-slots
+      author: Chiranjeevi D
+      preConditions:
+        onFail: MARK_RAN
+        not:
+          - tableExists:
+              tableName: coach_weekly_slots
+      changes:
+        - createTable:
+            tableName: coach_weekly_slots
+            columns:
+              - column:
+                  name: id
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: coach_id
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: day_of_week
+                  type: VARCHAR(15)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: is_available
+                  type: BOOLEAN
+                  defaultValueBoolean: false
+              - column:
+                  name: start_time
+                  type: TIME
+              - column:
+                  name: end_time
+                  type: TIME
+        - addUniqueConstraint:
+            tableName: coach_weekly_slots
+            columnNames: coach_id, day_of_week
+            constraintName: uq_coach_weekly_slots_coach_day
+        - addForeignKeyConstraint:
+            baseTableName: coach_weekly_slots
+            baseColumnNames: coach_id
+            referencedTableName: coaches
+            referencedColumnNames: id
+            constraintName: fk_coach_weekly_slots_coach
+            onDelete: CASCADE
+
+  # â”€â”€ coach_blocked_dates â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  - changeSet:
+      id: 008-14-create-coach-blocked-dates
+      author: Chiranjeevi D
+      preConditions:
+        onFail: MARK_RAN
+        not:
+          - tableExists:
+              tableName: coach_blocked_dates
+      changes:
+        - createTable:
+            tableName: coach_blocked_dates
+            columns:
+              - column:
+                  name: id
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: coach_id
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: date
+                  type: DATE
+                  constraints:
+                    nullable: false
+              - column:
+                  name: reason
+                  type: VARCHAR(200)
+        - addForeignKeyConstraint:
+            baseTableName: coach_blocked_dates
+            baseColumnNames: coach_id
+            referencedTableName: coaches
+            referencedColumnNames: id
+            constraintName: fk_coach_blocked_dates_coach
+            onDelete: CASCADE
+
+  # â”€â”€ coach_multi_session_discounts â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  - changeSet:
+      id: 008-15-create-coach-multi-session-discounts
+      author: Chiranjeevi D
+      preConditions:
+        onFail: MARK_RAN
+        not:
+          - tableExists:
+              tableName: coach_multi_session_discounts
+      changes:
+        - createTable:
+            tableName: coach_multi_session_discounts
+            columns:
+              - column:
+                  name: id
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: coach_id
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: min_sessions
+                  type: INTEGER
+                  constraints:
+                    nullable: false
+              - column:
+                  name: discount_pct
+                  type: INTEGER
+                  constraints:
+                    nullable: false
+        - addForeignKeyConstraint:
+            baseTableName: coach_multi_session_discounts
+            baseColumnNames: coach_id
+            referencedTableName: coaches
+            referencedColumnNames: id
+            constraintName: fk_coach_multi_session_discounts_coach
+            onDelete: CASCADE
+
+  # â”€â”€ coach_references â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  - changeSet:
+      id: 008-16-create-coach-references
+      author: Chiranjeevi D
+      preConditions:
+        onFail: MARK_RAN
+        not:
+          - tableExists:
+              tableName: coach_references
+      changes:
+        - createTable:
+            tableName: coach_references
+            columns:
+              - column:
+                  name: id
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: coach_id
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: name
+                  type: VARCHAR(100)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: relationship
+                  type: VARCHAR(150)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: phone
+                  type: VARCHAR(20)
+              - column:
+                  name: email
+                  type: VARCHAR(150)
+              - column:
+                  name: is_verified
+                  type: BOOLEAN
+                  defaultValueBoolean: false
+              - column:
+                  name: verified_at
+                  type: TIMESTAMP WITH TIME ZONE
+        - addForeignKeyConstraint:
+            baseTableName: coach_references
+            baseColumnNames: coach_id
+            referencedTableName: coaches
+            referencedColumnNames: id
+            constraintName: fk_coach_references_coach
+            onDelete: CASCADE
+
+  # â”€â”€ coach_verification_logs â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  - changeSet:
+      id: 008-17-create-coach-verification-logs
+      author: Chiranjeevi D
+      preConditions:
+        onFail: MARK_RAN
+        not:
+          - tableExists:
+              tableName: coach_verification_logs
+      changes:
+        - createTable:
+            tableName: coach_verification_logs
+            columns:
+              - column:
+                  name: id
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: coach_id
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: stage
+                  type: VARCHAR(30)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: note
+                  type: VARCHAR(500)
+              - column:
+                  name: timestamp
+                  type: TIMESTAMP WITH TIME ZONE
+                  constraints:
+                    nullable: false
+              - column:
+                  name: actor_type
+                  type: VARCHAR(20)
+              - column:
+                  name: actor_name
+                  type: VARCHAR(100)
+        - addForeignKeyConstraint:
+            baseTableName: coach_verification_logs
+            baseColumnNames: coach_id
+            referencedTableName: coaches
+            referencedColumnNames: id
+            constraintName: fk_coach_verification_logs_coach
+            onDelete: CASCADE
+
+  # â”€â”€ user_coaches â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  - changeSet:
+      id: 008-18-create-user-coaches
+      author: Chiranjeevi D
+      preConditions:
+        onFail: MARK_RAN
+        not:
+          - tableExists:
+              tableName: user_coaches
+      changes:
+        - createTable:
+            tableName: user_coaches
+            columns:
+              - column:
+                  name: id
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: user_id
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: coach_id
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: created_date
+                  type: TIMESTAMP WITH TIME ZONE
+                  constraints:
+                    nullable: false
+              - column:
+                  name: updated_date
+                  type: TIMESTAMP WITH TIME ZONE
+        - addUniqueConstraint:
+            tableName: user_coaches
+            columnNames: user_id, coach_id
+            constraintName: uq_user_coaches_user_coach
+        - addForeignKeyConstraint:
+            baseTableName: user_coaches
+            baseColumnNames: user_id
+            referencedTableName: users
+            referencedColumnNames: id
+            constraintName: fk_user_coaches_user
+            onDelete: CASCADE
+        - addForeignKeyConstraint:
+            baseTableName: user_coaches
+            baseColumnNames: coach_id
+            referencedTableName: coaches
+            referencedColumnNames: id
+            constraintName: fk_user_coaches_coach
+            onDelete: CASCADE

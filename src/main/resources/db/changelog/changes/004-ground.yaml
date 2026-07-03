@@ -1,0 +1,407 @@
+﻿databaseChangeLog:
+
+  # â”€â”€ grounds â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  - changeSet:
+      id: 004-01-create-grounds
+      author: Chiranjeevi D
+      preConditions:
+        onFail: MARK_RAN
+        not:
+          - tableExists:
+              tableName: grounds
+      changes:
+        - createTable:
+            tableName: grounds
+            columns:
+              - column:
+                  name: id
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: name
+                  type: VARCHAR(100)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: venue_type
+                  type: VARCHAR(40)
+              - column:
+                  name: description
+                  type: TEXT
+              - column:
+                  name: pincode
+                  type: VARCHAR(6)
+              - column:
+                  name: address_line1
+                  type: VARCHAR(255)
+              - column:
+                  name: address_line2
+                  type: VARCHAR(255)
+              - column:
+                  name: address
+                  type: VARCHAR(255)
+              - column:
+                  name: latitude
+                  type: DOUBLE PRECISION
+              - column:
+                  name: longitude
+                  type: DOUBLE PRECISION
+              - column:
+                  name: year_opened
+                  type: INTEGER
+              - column:
+                  name: custom_amenities
+                  type: VARCHAR(200)
+              - column:
+                  name: sport_id
+                  type: BIGINT
+              - column:
+                  name: created_by
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: approval_status
+                  type: VARCHAR(20)
+                  defaultValue: PENDING_APPROVAL
+                  constraints:
+                    nullable: false
+              - column:
+                  name: is_active
+                  type: BOOLEAN
+                  defaultValueBoolean: true
+                  constraints:
+                    nullable: false
+              - column:
+                  name: created_date
+                  type: TIMESTAMP WITH TIME ZONE
+                  constraints:
+                    nullable: false
+              - column:
+                  name: updated_date
+                  type: TIMESTAMP WITH TIME ZONE
+        - addForeignKeyConstraint:
+            baseTableName: grounds
+            baseColumnNames: sport_id
+            referencedTableName: sports
+            referencedColumnNames: id
+            constraintName: fk_grounds_sport
+            onDelete: SET NULL
+        - addForeignKeyConstraint:
+            baseTableName: grounds
+            baseColumnNames: created_by
+            referencedTableName: users
+            referencedColumnNames: id
+            constraintName: fk_grounds_created_by
+            onDelete: RESTRICT
+
+  # â”€â”€ ground_amenities â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  - changeSet:
+      id: 004-02-create-ground-amenities
+      author: Chiranjeevi D
+      preConditions:
+        onFail: MARK_RAN
+        not:
+          - tableExists:
+              tableName: ground_amenities
+      changes:
+        - createTable:
+            tableName: ground_amenities
+            columns:
+              - column:
+                  name: ground_id
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: amenity
+                  type: VARCHAR(50)
+                  constraints:
+                    nullable: false
+        - addForeignKeyConstraint:
+            baseTableName: ground_amenities
+            baseColumnNames: ground_id
+            referencedTableName: grounds
+            referencedColumnNames: id
+            constraintName: fk_ground_amenities_ground
+            onDelete: CASCADE
+
+  # â”€â”€ ground_images â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  - changeSet:
+      id: 004-03-create-ground-images
+      author: Chiranjeevi D
+      preConditions:
+        onFail: MARK_RAN
+        not:
+          - tableExists:
+              tableName: ground_images
+      changes:
+        - createTable:
+            tableName: ground_images
+            columns:
+              - column:
+                  name: ground_id
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: image_url
+                  type: VARCHAR(500)
+              - column:
+                  name: sort_order
+                  type: INTEGER
+        - addForeignKeyConstraint:
+            baseTableName: ground_images
+            baseColumnNames: ground_id
+            referencedTableName: grounds
+            referencedColumnNames: id
+            constraintName: fk_ground_images_ground
+            onDelete: CASCADE
+
+  # â”€â”€ ground_courts â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  - changeSet:
+      id: 004-04-create-ground-courts
+      author: Chiranjeevi D
+      preConditions:
+        onFail: MARK_RAN
+        not:
+          - tableExists:
+              tableName: ground_courts
+      changes:
+        - createTable:
+            tableName: ground_courts
+            columns:
+              - column:
+                  name: id
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: ground_id
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: name
+                  type: VARCHAR(40)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: sport_id
+                  type: BIGINT
+              - column:
+                  name: surface_type
+                  type: VARCHAR(30)
+              - column:
+                  name: is_indoor
+                  type: BOOLEAN
+                  defaultValueBoolean: false
+                  constraints:
+                    nullable: false
+              - column:
+                  name: is_air_conditioned
+                  type: BOOLEAN
+                  defaultValueBoolean: false
+                  constraints:
+                    nullable: false
+              - column:
+                  name: has_floodlights
+                  type: BOOLEAN
+                  defaultValueBoolean: false
+                  constraints:
+                    nullable: false
+              - column:
+                  name: length_ft
+                  type: INTEGER
+              - column:
+                  name: width_ft
+                  type: INTEGER
+              - column:
+                  name: max_players
+                  type: INTEGER
+              - column:
+                  name: notes
+                  type: VARCHAR(200)
+              - column:
+                  name: display_order
+                  type: INTEGER
+                  defaultValueNumeric: 0
+                  constraints:
+                    nullable: false
+              - column:
+                  name: is_active
+                  type: BOOLEAN
+                  defaultValueBoolean: true
+                  constraints:
+                    nullable: false
+              - column:
+                  name: created_date
+                  type: TIMESTAMP WITH TIME ZONE
+                  constraints:
+                    nullable: false
+              - column:
+                  name: updated_date
+                  type: TIMESTAMP WITH TIME ZONE
+        - addForeignKeyConstraint:
+            baseTableName: ground_courts
+            baseColumnNames: ground_id
+            referencedTableName: grounds
+            referencedColumnNames: id
+            constraintName: fk_ground_courts_ground
+            onDelete: CASCADE
+        - addForeignKeyConstraint:
+            baseTableName: ground_courts
+            baseColumnNames: sport_id
+            referencedTableName: sports
+            referencedColumnNames: id
+            constraintName: fk_ground_courts_sport
+            onDelete: SET NULL
+
+  # â”€â”€ ground_operating_hours â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  - changeSet:
+      id: 004-05-create-ground-operating-hours
+      author: Chiranjeevi D
+      preConditions:
+        onFail: MARK_RAN
+        not:
+          - tableExists:
+              tableName: ground_operating_hours
+      changes:
+        - createTable:
+            tableName: ground_operating_hours
+            columns:
+              - column:
+                  name: id
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: ground_id
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: day_of_week
+                  type: VARCHAR(10)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: is_open
+                  type: BOOLEAN
+                  defaultValueBoolean: true
+                  constraints:
+                    nullable: false
+              - column:
+                  name: open_time
+                  type: TIME
+              - column:
+                  name: close_time
+                  type: TIME
+        - addUniqueConstraint:
+            tableName: ground_operating_hours
+            columnNames: ground_id, day_of_week
+            constraintName: uq_ground_hours_ground_day
+        - addForeignKeyConstraint:
+            baseTableName: ground_operating_hours
+            baseColumnNames: ground_id
+            referencedTableName: grounds
+            referencedColumnNames: id
+            constraintName: fk_ground_operating_hours_ground
+            onDelete: CASCADE
+
+  # â”€â”€ court_pricing_tiers â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  - changeSet:
+      id: 004-06-create-court-pricing-tiers
+      author: Chiranjeevi D
+      preConditions:
+        onFail: MARK_RAN
+        not:
+          - tableExists:
+              tableName: court_pricing_tiers
+      changes:
+        - createTable:
+            tableName: court_pricing_tiers
+            columns:
+              - column:
+                  name: id
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: court_id
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: label
+                  type: VARCHAR(100)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: start_time
+                  type: TIME
+                  constraints:
+                    nullable: false
+              - column:
+                  name: end_time
+                  type: TIME
+                  constraints:
+                    nullable: false
+              - column:
+                  name: price_per_hour
+                  type: DECIMAL(10, 2)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: created_date
+                  type: TIMESTAMP WITH TIME ZONE
+                  constraints:
+                    nullable: false
+              - column:
+                  name: updated_date
+                  type: TIMESTAMP WITH TIME ZONE
+        - addForeignKeyConstraint:
+            baseTableName: court_pricing_tiers
+            baseColumnNames: court_id
+            referencedTableName: ground_courts
+            referencedColumnNames: id
+            constraintName: fk_pricing_tiers_court
+            onDelete: CASCADE
+
+  # â”€â”€ pricing_tier_days â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  - changeSet:
+      id: 004-07-create-pricing-tier-days
+      author: Chiranjeevi D
+      preConditions:
+        onFail: MARK_RAN
+        not:
+          - tableExists:
+              tableName: pricing_tier_days
+      changes:
+        - createTable:
+            tableName: pricing_tier_days
+            columns:
+              - column:
+                  name: tier_id
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: day_of_week
+                  type: VARCHAR(10)
+        - addForeignKeyConstraint:
+            baseTableName: pricing_tier_days
+            baseColumnNames: tier_id
+            referencedTableName: court_pricing_tiers
+            referencedColumnNames: id
+            constraintName: fk_pricing_tier_days_tier
+            onDelete: CASCADE

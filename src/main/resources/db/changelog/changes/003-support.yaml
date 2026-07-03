@@ -1,0 +1,379 @@
+﻿databaseChangeLog:
+
+  # â”€â”€ notification_templates â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  - changeSet:
+      id: 003-01-create-notification-templates
+      author: Chiranjeevi D
+      preConditions:
+        onFail: MARK_RAN
+        not:
+          - tableExists:
+              tableName: notification_templates
+      changes:
+        - createTable:
+            tableName: notification_templates
+            columns:
+              - column:
+                  name: id
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: event_type
+                  type: VARCHAR(50)
+                  constraints:
+                    nullable: false
+                    unique: true
+              - column:
+                  name: title
+                  type: VARCHAR(200)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: body
+                  type: TEXT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: description
+                  type: TEXT
+              - column:
+                  name: is_active
+                  type: BOOLEAN
+                  defaultValueBoolean: true
+              - column:
+                  name: created_date
+                  type: TIMESTAMP WITH TIME ZONE
+              - column:
+                  name: updated_date
+                  type: TIMESTAMP WITH TIME ZONE
+
+  # â”€â”€ user_notifications â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  - changeSet:
+      id: 003-02-create-user-notifications
+      author: Chiranjeevi D
+      preConditions:
+        onFail: MARK_RAN
+        not:
+          - tableExists:
+              tableName: user_notifications
+      changes:
+        - createTable:
+            tableName: user_notifications
+            columns:
+              - column:
+                  name: id
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: user_id
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: title
+                  type: VARCHAR(200)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: body
+                  type: TEXT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: event_type
+                  type: VARCHAR(50)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: is_read
+                  type: BOOLEAN
+                  defaultValueBoolean: false
+                  constraints:
+                    nullable: false
+              - column:
+                  name: sent_at
+                  type: TIMESTAMP WITH TIME ZONE
+                  constraints:
+                    nullable: false
+        - addForeignKeyConstraint:
+            baseTableName: user_notifications
+            baseColumnNames: user_id
+            referencedTableName: users
+            referencedColumnNames: id
+            constraintName: fk_user_notifications_user
+            onDelete: CASCADE
+        - createIndex:
+            tableName: user_notifications
+            indexName: idx_user_notifications_user
+            columns:
+              - column:
+                  name: user_id
+
+  # â”€â”€ user_devices â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  - changeSet:
+      id: 003-03-create-user-devices
+      author: Chiranjeevi D
+      preConditions:
+        onFail: MARK_RAN
+        not:
+          - tableExists:
+              tableName: user_devices
+      changes:
+        - createTable:
+            tableName: user_devices
+            columns:
+              - column:
+                  name: id
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: user_id
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: device_id
+                  type: VARCHAR(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: fcm_token
+                  type: VARCHAR(500)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: platform
+                  type: VARCHAR(10)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: is_active
+                  type: BOOLEAN
+                  defaultValueBoolean: true
+              - column:
+                  name: created_date
+                  type: TIMESTAMP WITH TIME ZONE
+              - column:
+                  name: updated_date
+                  type: TIMESTAMP WITH TIME ZONE
+        - addUniqueConstraint:
+            tableName: user_devices
+            columnNames: user_id, device_id
+            constraintName: uq_user_devices_user_device
+        - addForeignKeyConstraint:
+            baseTableName: user_devices
+            baseColumnNames: user_id
+            referencedTableName: users
+            referencedColumnNames: id
+            constraintName: fk_user_devices_user
+            onDelete: CASCADE
+
+  # â”€â”€ user_sports â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  - changeSet:
+      id: 003-04-create-user-sports
+      author: Chiranjeevi D
+      preConditions:
+        onFail: MARK_RAN
+        not:
+          - tableExists:
+              tableName: user_sports
+      changes:
+        - createTable:
+            tableName: user_sports
+            columns:
+              - column:
+                  name: id
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: user_id
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: sport_id
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: skill_level
+                  type: VARCHAR(30)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: created_date
+                  type: TIMESTAMP WITH TIME ZONE
+                  constraints:
+                    nullable: false
+              - column:
+                  name: updated_date
+                  type: TIMESTAMP WITH TIME ZONE
+        - addUniqueConstraint:
+            tableName: user_sports
+            columnNames: user_id, sport_id
+            constraintName: uq_user_sports_user_sport
+        - addForeignKeyConstraint:
+            baseTableName: user_sports
+            baseColumnNames: user_id
+            referencedTableName: users
+            referencedColumnNames: id
+            constraintName: fk_user_sports_user
+            onDelete: CASCADE
+        - addForeignKeyConstraint:
+            baseTableName: user_sports
+            baseColumnNames: sport_id
+            referencedTableName: sports
+            referencedColumnNames: id
+            constraintName: fk_user_sports_sport
+            onDelete: CASCADE
+
+  # â”€â”€ sport_activity_logs â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  - changeSet:
+      id: 003-05-create-sport-activity-logs
+      author: Chiranjeevi D
+      preConditions:
+        onFail: MARK_RAN
+        not:
+          - tableExists:
+              tableName: sport_activity_logs
+      changes:
+        - createTable:
+            tableName: sport_activity_logs
+            columns:
+              - column:
+                  name: id
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: user_id
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: sport_id
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: action
+                  type: VARCHAR(50)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: s3_key
+                  type: VARCHAR(500)
+              - column:
+                  name: payload
+                  type: JSONB
+              - column:
+                  name: created_date
+                  type: TIMESTAMP WITH TIME ZONE
+                  constraints:
+                    nullable: false
+              - column:
+                  name: updated_date
+                  type: TIMESTAMP WITH TIME ZONE
+        - addForeignKeyConstraint:
+            baseTableName: sport_activity_logs
+            baseColumnNames: user_id
+            referencedTableName: users
+            referencedColumnNames: id
+            constraintName: fk_sport_activity_logs_user
+            onDelete: CASCADE
+        - addForeignKeyConstraint:
+            baseTableName: sport_activity_logs
+            baseColumnNames: sport_id
+            referencedTableName: sports
+            referencedColumnNames: id
+            constraintName: fk_sport_activity_logs_sport
+            onDelete: CASCADE
+      modifySql:
+        - dbms: h2
+          replace:
+            replace: JSONB
+            with: CLOB
+
+  # â”€â”€ media_uploads â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  - changeSet:
+      id: 003-06-create-media-uploads
+      author: Chiranjeevi D
+      preConditions:
+        onFail: MARK_RAN
+        not:
+          - tableExists:
+              tableName: media_uploads
+      changes:
+        - createTable:
+            tableName: media_uploads
+            columns:
+              - column:
+                  name: id
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: entity_type
+                  type: VARCHAR(20)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: entity_id
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: s3_key
+                  type: VARCHAR(500)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: s3_url
+                  type: VARCHAR(1000)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: uploaded_by
+                  type: BIGINT
+              - column:
+                  name: content_type
+                  type: VARCHAR(100)
+              - column:
+                  name: file_size_bytes
+                  type: BIGINT
+              - column:
+                  name: created_date
+                  type: TIMESTAMP WITH TIME ZONE
+                  constraints:
+                    nullable: false
+        - addForeignKeyConstraint:
+            baseTableName: media_uploads
+            baseColumnNames: uploaded_by
+            referencedTableName: users
+            referencedColumnNames: id
+            constraintName: fk_media_uploads_user
+            onDelete: SET NULL
+        - createIndex:
+            tableName: media_uploads
+            indexName: idx_media_uploads_entity
+            columns:
+              - column:
+                  name: entity_type
+              - column:
+                  name: entity_id

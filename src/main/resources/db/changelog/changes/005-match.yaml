@@ -1,0 +1,187 @@
+﻿databaseChangeLog:
+
+  # â”€â”€ matches â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  - changeSet:
+      id: 005-01-create-matches
+      author: Chiranjeevi D
+      preConditions:
+        onFail: MARK_RAN
+        not:
+          - tableExists:
+              tableName: matches
+      changes:
+        - createTable:
+            tableName: matches
+            columns:
+              - column:
+                  name: id
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: host_id
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: sport_id
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: title
+                  type: VARCHAR(150)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: venue
+                  type: VARCHAR(200)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: scheduled_at
+                  type: TIMESTAMP WITH TIME ZONE
+                  constraints:
+                    nullable: false
+              - column:
+                  name: max_players
+                  type: INTEGER
+                  constraints:
+                    nullable: false
+              - column:
+                  name: status
+                  type: VARCHAR(20)
+                  defaultValue: PENDING_APPROVAL
+                  constraints:
+                    nullable: false
+              - column:
+                  name: score
+                  type: VARCHAR(20)
+              - column:
+                  name: created_date
+                  type: TIMESTAMP WITH TIME ZONE
+                  constraints:
+                    nullable: false
+              - column:
+                  name: updated_date
+                  type: TIMESTAMP WITH TIME ZONE
+        - addForeignKeyConstraint:
+            baseTableName: matches
+            baseColumnNames: host_id
+            referencedTableName: users
+            referencedColumnNames: id
+            constraintName: fk_matches_host
+            onDelete: RESTRICT
+        - addForeignKeyConstraint:
+            baseTableName: matches
+            baseColumnNames: sport_id
+            referencedTableName: sports
+            referencedColumnNames: id
+            constraintName: fk_matches_sport
+            onDelete: RESTRICT
+
+  # â”€â”€ match_images â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  - changeSet:
+      id: 005-02-create-match-images
+      author: Chiranjeevi D
+      preConditions:
+        onFail: MARK_RAN
+        not:
+          - tableExists:
+              tableName: match_images
+      changes:
+        - createTable:
+            tableName: match_images
+            columns:
+              - column:
+                  name: match_id
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: image_url
+                  type: VARCHAR(500)
+              - column:
+                  name: sort_order
+                  type: INTEGER
+        - addForeignKeyConstraint:
+            baseTableName: match_images
+            baseColumnNames: match_id
+            referencedTableName: matches
+            referencedColumnNames: id
+            constraintName: fk_match_images_match
+            onDelete: CASCADE
+
+  # â”€â”€ match_participants â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  - changeSet:
+      id: 005-03-create-match-participants
+      author: Chiranjeevi D
+      preConditions:
+        onFail: MARK_RAN
+        not:
+          - tableExists:
+              tableName: match_participants
+      changes:
+        - createTable:
+            tableName: match_participants
+            columns:
+              - column:
+                  name: id
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: match_id
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: user_id
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: status
+                  type: VARCHAR(20)
+                  defaultValue: CONFIRMED
+                  constraints:
+                    nullable: false
+              - column:
+                  name: is_winner
+                  type: BOOLEAN
+              - column:
+                  name: rating
+                  type: INTEGER
+              - column:
+                  name: rated_at
+                  type: TIMESTAMP WITH TIME ZONE
+              - column:
+                  name: created_date
+                  type: TIMESTAMP WITH TIME ZONE
+                  constraints:
+                    nullable: false
+              - column:
+                  name: updated_date
+                  type: TIMESTAMP WITH TIME ZONE
+        - addUniqueConstraint:
+            tableName: match_participants
+            columnNames: match_id, user_id
+            constraintName: uq_match_participants_match_user
+        - addForeignKeyConstraint:
+            baseTableName: match_participants
+            baseColumnNames: match_id
+            referencedTableName: matches
+            referencedColumnNames: id
+            constraintName: fk_match_participants_match
+            onDelete: CASCADE
+        - addForeignKeyConstraint:
+            baseTableName: match_participants
+            baseColumnNames: user_id
+            referencedTableName: users
+            referencedColumnNames: id
+            constraintName: fk_match_participants_user
+            onDelete: CASCADE

@@ -1,0 +1,382 @@
+﻿databaseChangeLog:
+
+  # â”€â”€ academies â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  - changeSet:
+      id: 009-01-create-academies
+      author: Chiranjeevi D
+      preConditions:
+        onFail: MARK_RAN
+        not:
+          - tableExists:
+              tableName: academies
+      changes:
+        - createTable:
+            tableName: academies
+            columns:
+              - column:
+                  name: id
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: owner_id
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: name
+                  type: VARCHAR(200)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: tagline
+                  type: VARCHAR(300)
+              - column:
+                  name: description
+                  type: TEXT
+              - column:
+                  name: logo_uri
+                  type: VARCHAR(500)
+              - column:
+                  name: cover_photo_url
+                  type: VARCHAR(500)
+              - column:
+                  name: founded_year
+                  type: INTEGER
+              - column:
+                  name: city
+                  type: VARCHAR(100)
+              - column:
+                  name: state
+                  type: VARCHAR(100)
+              - column:
+                  name: academy_type
+                  type: VARCHAR(30)
+              - column:
+                  name: season
+                  type: VARCHAR(20)
+              - column:
+                  name: is_residential
+                  type: BOOLEAN
+                  defaultValueBoolean: false
+              - column:
+                  name: residential_capacity
+                  type: INTEGER
+              - column:
+                  name: mess_type
+                  type: VARCHAR(15)
+              - column:
+                  name: gender_policy
+                  type: VARCHAR(10)
+              - column:
+                  name: approval_status
+                  type: VARCHAR(20)
+                  defaultValue: PENDING_APPROVAL
+              - column:
+                  name: is_published
+                  type: BOOLEAN
+                  defaultValueBoolean: false
+              - column:
+                  name: is_active
+                  type: BOOLEAN
+                  defaultValueBoolean: true
+              - column:
+                  name: wizard_step
+                  type: INTEGER
+                  defaultValueNumeric: 1
+              - column:
+                  name: approved_at
+                  type: TIMESTAMP WITH TIME ZONE
+              - column:
+                  name: rejected_at
+                  type: TIMESTAMP WITH TIME ZONE
+              - column:
+                  name: suspended_at
+                  type: TIMESTAMP WITH TIME ZONE
+              - column:
+                  name: avg_rating
+                  type: DECIMAL(3, 2)
+                  defaultValueNumeric: 0
+              - column:
+                  name: review_count
+                  type: INTEGER
+                  defaultValueNumeric: 0
+              - column:
+                  name: total_students_enrolled
+                  type: INTEGER
+                  defaultValueNumeric: 0
+              # Embedded: AcademyContactInfo
+              - column:
+                  name: contact_person_name
+                  type: VARCHAR(100)
+              - column:
+                  name: contact_designation
+                  type: VARCHAR(100)
+              - column:
+                  name: contact_phone
+                  type: VARCHAR(20)
+              - column:
+                  name: contact_email
+                  type: VARCHAR(150)
+              - column:
+                  name: contact_whatsapp
+                  type: VARCHAR(20)
+              - column:
+                  name: contact_website_url
+                  type: VARCHAR(300)
+              - column:
+                  name: contact_instagram_handle
+                  type: VARCHAR(100)
+              # Embedded: AcademyDocuments
+              - column:
+                  name: doc_business_reg_type
+                  type: VARCHAR(30)
+              - column:
+                  name: doc_registration_number
+                  type: VARCHAR(100)
+              - column:
+                  name: doc_registration_doc_uri
+                  type: VARCHAR(500)
+              - column:
+                  name: doc_gstin
+                  type: VARCHAR(20)
+              - column:
+                  name: doc_pan_number
+                  type: VARCHAR(20)
+              - column:
+                  name: doc_pocso_compliant
+                  type: BOOLEAN
+                  defaultValueBoolean: false
+              - column:
+                  name: doc_pocso_policy_doc_uri
+                  type: VARCHAR(500)
+              - column:
+                  name: doc_has_insurance
+                  type: BOOLEAN
+                  defaultValueBoolean: false
+              - column:
+                  name: doc_insurance_doc_uri
+                  type: VARCHAR(500)
+              - column:
+                  name: doc_has_safety_cert
+                  type: BOOLEAN
+                  defaultValueBoolean: false
+              - column:
+                  name: doc_bank_account_last4
+                  type: VARCHAR(4)
+              - column:
+                  name: doc_bank_account_full
+                  type: VARCHAR(50)
+              - column:
+                  name: doc_ifsc_code
+                  type: VARCHAR(15)
+              - column:
+                  name: doc_bank_name
+                  type: VARCHAR(100)
+              - column:
+                  name: doc_upi_id
+                  type: VARCHAR(100)
+              - column:
+                  name: created_at
+                  type: TIMESTAMP WITH TIME ZONE
+                  constraints:
+                    nullable: false
+              - column:
+                  name: updated_at
+                  type: TIMESTAMP WITH TIME ZONE
+        - addForeignKeyConstraint:
+            baseTableName: academies
+            baseColumnNames: owner_id
+            referencedTableName: users
+            referencedColumnNames: id
+            constraintName: fk_academies_owner
+            onDelete: RESTRICT
+
+  # â”€â”€ academy_sports â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  - changeSet:
+      id: 009-02-create-academy-sports
+      author: Chiranjeevi D
+      preConditions:
+        onFail: MARK_RAN
+        not:
+          - tableExists:
+              tableName: academy_sports
+      changes:
+        - createTable:
+            tableName: academy_sports
+            columns:
+              - column:
+                  name: academy_id
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: sport_id
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+        - addPrimaryKey:
+            tableName: academy_sports
+            columnNames: academy_id, sport_id
+            constraintName: pk_academy_sports
+        - addForeignKeyConstraint:
+            baseTableName: academy_sports
+            baseColumnNames: academy_id
+            referencedTableName: academies
+            referencedColumnNames: id
+            constraintName: fk_academy_sports_academy
+            onDelete: CASCADE
+        - addForeignKeyConstraint:
+            baseTableName: academy_sports
+            baseColumnNames: sport_id
+            referencedTableName: sports
+            referencedColumnNames: id
+            constraintName: fk_academy_sports_sport
+            onDelete: CASCADE
+
+  # â”€â”€ academy_skill_tiers â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  - changeSet:
+      id: 009-03-create-academy-skill-tiers
+      author: Chiranjeevi D
+      preConditions:
+        onFail: MARK_RAN
+        not:
+          - tableExists:
+              tableName: academy_skill_tiers
+      changes:
+        - createTable:
+            tableName: academy_skill_tiers
+            columns:
+              - column:
+                  name: academy_id
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: skill_tier
+                  type: VARCHAR(20)
+        - addForeignKeyConstraint:
+            baseTableName: academy_skill_tiers
+            baseColumnNames: academy_id
+            referencedTableName: academies
+            referencedColumnNames: id
+            constraintName: fk_academy_skill_tiers_academy
+            onDelete: CASCADE
+
+  # â”€â”€ academy_age_groups â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  - changeSet:
+      id: 009-04-create-academy-age-groups
+      author: Chiranjeevi D
+      preConditions:
+        onFail: MARK_RAN
+        not:
+          - tableExists:
+              tableName: academy_age_groups
+      changes:
+        - createTable:
+            tableName: academy_age_groups
+            columns:
+              - column:
+                  name: academy_id
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: age_group
+                  type: VARCHAR(20)
+        - addForeignKeyConstraint:
+            baseTableName: academy_age_groups
+            baseColumnNames: academy_id
+            referencedTableName: academies
+            referencedColumnNames: id
+            constraintName: fk_academy_age_groups_academy
+            onDelete: CASCADE
+
+  # â”€â”€ academy_languages â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  - changeSet:
+      id: 009-05-create-academy-languages
+      author: Chiranjeevi D
+      preConditions:
+        onFail: MARK_RAN
+        not:
+          - tableExists:
+              tableName: academy_languages
+      changes:
+        - createTable:
+            tableName: academy_languages
+            columns:
+              - column:
+                  name: academy_id
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: language
+                  type: VARCHAR(50)
+        - addForeignKeyConstraint:
+            baseTableName: academy_languages
+            baseColumnNames: academy_id
+            referencedTableName: academies
+            referencedColumnNames: id
+            constraintName: fk_academy_languages_academy
+            onDelete: CASCADE
+
+  # â”€â”€ academy_residential_age_groups â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  - changeSet:
+      id: 009-06-create-academy-residential-age-groups
+      author: Chiranjeevi D
+      preConditions:
+        onFail: MARK_RAN
+        not:
+          - tableExists:
+              tableName: academy_residential_age_groups
+      changes:
+        - createTable:
+            tableName: academy_residential_age_groups
+            columns:
+              - column:
+                  name: academy_id
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: age_group
+                  type: VARCHAR(20)
+        - addForeignKeyConstraint:
+            baseTableName: academy_residential_age_groups
+            baseColumnNames: academy_id
+            referencedTableName: academies
+            referencedColumnNames: id
+            constraintName: fk_academy_residential_age_groups_academy
+            onDelete: CASCADE
+
+  # â”€â”€ academy_residential_amenities â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  - changeSet:
+      id: 009-07-create-academy-residential-amenities
+      author: Chiranjeevi D
+      preConditions:
+        onFail: MARK_RAN
+        not:
+          - tableExists:
+              tableName: academy_residential_amenities
+      changes:
+        - createTable:
+            tableName: academy_residential_amenities
+            columns:
+              - column:
+                  name: academy_id
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: amenity
+                  type: VARCHAR(100)
+        - addForeignKeyConstraint:
+            baseTableName: academy_residential_amenities
+            baseColumnNames: academy_id
+            referencedTableName: academies
+            referencedColumnNames: id
+            constraintName: fk_academy_residential_amenities_academy
+            onDelete: CASCADE

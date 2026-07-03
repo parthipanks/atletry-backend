@@ -1,0 +1,826 @@
+﻿databaseChangeLog:
+
+  # â”€â”€ academy_branches â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  - changeSet:
+      id: 010-01-create-academy-branches
+      author: Chiranjeevi D
+      preConditions:
+        onFail: MARK_RAN
+        not:
+          - tableExists:
+              tableName: academy_branches
+      changes:
+        - createTable:
+            tableName: academy_branches
+            columns:
+              - column:
+                  name: id
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: academy_id
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: name
+                  type: VARCHAR(150)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: address
+                  type: VARCHAR(255)
+              - column:
+                  name: area
+                  type: VARCHAR(100)
+              - column:
+                  name: city
+                  type: VARCHAR(100)
+              - column:
+                  name: pincode
+                  type: VARCHAR(6)
+              - column:
+                  name: latitude
+                  type: DOUBLE PRECISION
+              - column:
+                  name: longitude
+                  type: DOUBLE PRECISION
+              - column:
+                  name: is_residential
+                  type: BOOLEAN
+                  defaultValueBoolean: false
+              - column:
+                  name: is_primary
+                  type: BOOLEAN
+                  defaultValueBoolean: false
+              - column:
+                  name: linked_venue_id
+                  type: BIGINT
+              - column:
+                  name: is_active
+                  type: BOOLEAN
+                  defaultValueBoolean: true
+        - addForeignKeyConstraint:
+            baseTableName: academy_branches
+            baseColumnNames: academy_id
+            referencedTableName: academies
+            referencedColumnNames: id
+            constraintName: fk_academy_branches_academy
+            onDelete: CASCADE
+        - addForeignKeyConstraint:
+            baseTableName: academy_branches
+            baseColumnNames: linked_venue_id
+            referencedTableName: grounds
+            referencedColumnNames: id
+            constraintName: fk_academy_branches_ground
+            onDelete: SET NULL
+
+  # â”€â”€ academy_branch_facilities â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  - changeSet:
+      id: 010-02-create-academy-branch-facilities
+      author: Chiranjeevi D
+      preConditions:
+        onFail: MARK_RAN
+        not:
+          - tableExists:
+              tableName: academy_branch_facilities
+      changes:
+        - createTable:
+            tableName: academy_branch_facilities
+            columns:
+              - column:
+                  name: branch_id
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: facility
+                  type: VARCHAR(30)
+        - addForeignKeyConstraint:
+            baseTableName: academy_branch_facilities
+            baseColumnNames: branch_id
+            referencedTableName: academy_branches
+            referencedColumnNames: id
+            constraintName: fk_academy_branch_facilities_branch
+            onDelete: CASCADE
+
+  # â”€â”€ academy_branch_photos â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  - changeSet:
+      id: 010-03-create-academy-branch-photos
+      author: Chiranjeevi D
+      preConditions:
+        onFail: MARK_RAN
+        not:
+          - tableExists:
+              tableName: academy_branch_photos
+      changes:
+        - createTable:
+            tableName: academy_branch_photos
+            columns:
+              - column:
+                  name: branch_id
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: photo_url
+                  type: VARCHAR(500)
+              - column:
+                  name: sort_order
+                  type: INTEGER
+        - addForeignKeyConstraint:
+            baseTableName: academy_branch_photos
+            baseColumnNames: branch_id
+            referencedTableName: academy_branches
+            referencedColumnNames: id
+            constraintName: fk_academy_branch_photos_branch
+            onDelete: CASCADE
+
+  # â”€â”€ academy_branch_sports â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  - changeSet:
+      id: 010-04-create-academy-branch-sports
+      author: Chiranjeevi D
+      preConditions:
+        onFail: MARK_RAN
+        not:
+          - tableExists:
+              tableName: academy_branch_sports
+      changes:
+        - createTable:
+            tableName: academy_branch_sports
+            columns:
+              - column:
+                  name: branch_id
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: sport_name
+                  type: VARCHAR(100)
+        - addForeignKeyConstraint:
+            baseTableName: academy_branch_sports
+            baseColumnNames: branch_id
+            referencedTableName: academy_branches
+            referencedColumnNames: id
+            constraintName: fk_academy_branch_sports_branch
+            onDelete: CASCADE
+
+  # â”€â”€ academy_staff â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  - changeSet:
+      id: 010-05-create-academy-staff
+      author: Chiranjeevi D
+      preConditions:
+        onFail: MARK_RAN
+        not:
+          - tableExists:
+              tableName: academy_staff
+      changes:
+        - createTable:
+            tableName: academy_staff
+            columns:
+              - column:
+                  name: id
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: academy_id
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: name
+                  type: VARCHAR(100)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: role
+                  type: VARCHAR(25)
+              - column:
+                  name: photo_uri
+                  type: VARCHAR(500)
+              - column:
+                  name: years_of_experience
+                  type: INTEGER
+              - column:
+                  name: playing_background
+                  type: VARCHAR(200)
+              - column:
+                  name: linked_coach_id
+                  type: BIGINT
+              - column:
+                  name: is_head_coach
+                  type: BOOLEAN
+                  defaultValueBoolean: false
+              - column:
+                  name: bio
+                  type: TEXT
+        - addForeignKeyConstraint:
+            baseTableName: academy_staff
+            baseColumnNames: academy_id
+            referencedTableName: academies
+            referencedColumnNames: id
+            constraintName: fk_academy_staff_academy
+            onDelete: CASCADE
+        - addForeignKeyConstraint:
+            baseTableName: academy_staff
+            baseColumnNames: linked_coach_id
+            referencedTableName: coaches
+            referencedColumnNames: id
+            constraintName: fk_academy_staff_coach
+            onDelete: SET NULL
+
+  # â”€â”€ academy_staff_sports â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  - changeSet:
+      id: 010-06-create-academy-staff-sports
+      author: Chiranjeevi D
+      preConditions:
+        onFail: MARK_RAN
+        not:
+          - tableExists:
+              tableName: academy_staff_sports
+      changes:
+        - createTable:
+            tableName: academy_staff_sports
+            columns:
+              - column:
+                  name: staff_id
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: sport_name
+                  type: VARCHAR(100)
+        - addForeignKeyConstraint:
+            baseTableName: academy_staff_sports
+            baseColumnNames: staff_id
+            referencedTableName: academy_staff
+            referencedColumnNames: id
+            constraintName: fk_academy_staff_sports_staff
+            onDelete: CASCADE
+
+  # â”€â”€ academy_staff_certifications â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  - changeSet:
+      id: 010-07-create-academy-staff-certifications
+      author: Chiranjeevi D
+      preConditions:
+        onFail: MARK_RAN
+        not:
+          - tableExists:
+              tableName: academy_staff_certifications
+      changes:
+        - createTable:
+            tableName: academy_staff_certifications
+            columns:
+              - column:
+                  name: staff_id
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: certification
+                  type: VARCHAR(200)
+        - addForeignKeyConstraint:
+            baseTableName: academy_staff_certifications
+            baseColumnNames: staff_id
+            referencedTableName: academy_staff
+            referencedColumnNames: id
+            constraintName: fk_academy_staff_certifications_staff
+            onDelete: CASCADE
+
+  # â”€â”€ academy_batches â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  - changeSet:
+      id: 010-08-create-academy-batches
+      author: Chiranjeevi D
+      preConditions:
+        onFail: MARK_RAN
+        not:
+          - tableExists:
+              tableName: academy_batches
+      changes:
+        - createTable:
+            tableName: academy_batches
+            columns:
+              - column:
+                  name: id
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: academy_id
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: name
+                  type: VARCHAR(150)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: sport_id
+                  type: BIGINT
+              - column:
+                  name: skill_tier
+                  type: VARCHAR(20)
+              - column:
+                  name: start_time
+                  type: TIME
+              - column:
+                  name: end_time
+                  type: TIME
+              - column:
+                  name: capacity
+                  type: INTEGER
+              - column:
+                  name: enrolled_count
+                  type: INTEGER
+                  defaultValueNumeric: 0
+              - column:
+                  name: branch_id
+                  type: BIGINT
+              - column:
+                  name: assigned_staff_id
+                  type: BIGINT
+              - column:
+                  name: fee
+                  type: DECIMAL(10, 2)
+              - column:
+                  name: fee_frequency
+                  type: VARCHAR(20)
+              - column:
+                  name: is_open
+                  type: BOOLEAN
+                  defaultValueBoolean: true
+              - column:
+                  name: gender_policy
+                  type: VARCHAR(10)
+              - column:
+                  name: description
+                  type: TEXT
+        - addForeignKeyConstraint:
+            baseTableName: academy_batches
+            baseColumnNames: academy_id
+            referencedTableName: academies
+            referencedColumnNames: id
+            constraintName: fk_academy_batches_academy
+            onDelete: CASCADE
+        - addForeignKeyConstraint:
+            baseTableName: academy_batches
+            baseColumnNames: sport_id
+            referencedTableName: sports
+            referencedColumnNames: id
+            constraintName: fk_academy_batches_sport
+            onDelete: SET NULL
+        - addForeignKeyConstraint:
+            baseTableName: academy_batches
+            baseColumnNames: branch_id
+            referencedTableName: academy_branches
+            referencedColumnNames: id
+            constraintName: fk_academy_batches_branch
+            onDelete: SET NULL
+        - addForeignKeyConstraint:
+            baseTableName: academy_batches
+            baseColumnNames: assigned_staff_id
+            referencedTableName: academy_staff
+            referencedColumnNames: id
+            constraintName: fk_academy_batches_staff
+            onDelete: SET NULL
+
+  # â”€â”€ academy_batch_age_groups â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  - changeSet:
+      id: 010-09-create-academy-batch-age-groups
+      author: Chiranjeevi D
+      preConditions:
+        onFail: MARK_RAN
+        not:
+          - tableExists:
+              tableName: academy_batch_age_groups
+      changes:
+        - createTable:
+            tableName: academy_batch_age_groups
+            columns:
+              - column:
+                  name: batch_id
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: age_group
+                  type: VARCHAR(20)
+        - addForeignKeyConstraint:
+            baseTableName: academy_batch_age_groups
+            baseColumnNames: batch_id
+            referencedTableName: academy_batches
+            referencedColumnNames: id
+            constraintName: fk_academy_batch_age_groups_batch
+            onDelete: CASCADE
+
+  # â”€â”€ academy_batch_days â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  - changeSet:
+      id: 010-10-create-academy-batch-days
+      author: Chiranjeevi D
+      preConditions:
+        onFail: MARK_RAN
+        not:
+          - tableExists:
+              tableName: academy_batch_days
+      changes:
+        - createTable:
+            tableName: academy_batch_days
+            columns:
+              - column:
+                  name: batch_id
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: day_of_week
+                  type: VARCHAR(15)
+        - addForeignKeyConstraint:
+            baseTableName: academy_batch_days
+            baseColumnNames: batch_id
+            referencedTableName: academy_batches
+            referencedColumnNames: id
+            constraintName: fk_academy_batch_days_batch
+            onDelete: CASCADE
+
+  # â”€â”€ academy_fee_components â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  - changeSet:
+      id: 010-11-create-academy-fee-components
+      author: Chiranjeevi D
+      preConditions:
+        onFail: MARK_RAN
+        not:
+          - tableExists:
+              tableName: academy_fee_components
+      changes:
+        - createTable:
+            tableName: academy_fee_components
+            columns:
+              - column:
+                  name: id
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: academy_id
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: label
+                  type: VARCHAR(150)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: amount
+                  type: DECIMAL(10, 2)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: frequency
+                  type: VARCHAR(20)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: is_mandatory
+                  type: BOOLEAN
+                  defaultValueBoolean: true
+              - column:
+                  name: is_refundable
+                  type: BOOLEAN
+                  defaultValueBoolean: false
+              - column:
+                  name: notes
+                  type: VARCHAR(300)
+        - addForeignKeyConstraint:
+            baseTableName: academy_fee_components
+            baseColumnNames: academy_id
+            referencedTableName: academies
+            referencedColumnNames: id
+            constraintName: fk_academy_fee_components_academy
+            onDelete: CASCADE
+
+  # â”€â”€ academy_scholarships â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  - changeSet:
+      id: 010-12-create-academy-scholarships
+      author: Chiranjeevi D
+      preConditions:
+        onFail: MARK_RAN
+        not:
+          - tableExists:
+              tableName: academy_scholarships
+      changes:
+        - createTable:
+            tableName: academy_scholarships
+            columns:
+              - column:
+                  name: id
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: academy_id
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: name
+                  type: VARCHAR(150)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: description
+                  type: TEXT
+              - column:
+                  name: discount_pct
+                  type: INTEGER
+              - column:
+                  name: fixed_amount
+                  type: DECIMAL(10, 2)
+              - column:
+                  name: eligibility
+                  type: VARCHAR(300)
+        - addForeignKeyConstraint:
+            baseTableName: academy_scholarships
+            baseColumnNames: academy_id
+            referencedTableName: academies
+            referencedColumnNames: id
+            constraintName: fk_academy_scholarships_academy
+            onDelete: CASCADE
+
+  # â”€â”€ academy_admission_steps â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  - changeSet:
+      id: 010-13-create-academy-admission-steps
+      author: Chiranjeevi D
+      preConditions:
+        onFail: MARK_RAN
+        not:
+          - tableExists:
+              tableName: academy_admission_steps
+      changes:
+        - createTable:
+            tableName: academy_admission_steps
+            columns:
+              - column:
+                  name: id
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: academy_id
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: type
+                  type: VARCHAR(30)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: label
+                  type: VARCHAR(100)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: is_free
+                  type: BOOLEAN
+                  defaultValueBoolean: true
+              - column:
+                  name: fee
+                  type: DECIMAL(10, 2)
+              - column:
+                  name: sort_order
+                  type: INTEGER
+                  defaultValueNumeric: 0
+        - addForeignKeyConstraint:
+            baseTableName: academy_admission_steps
+            baseColumnNames: academy_id
+            referencedTableName: academies
+            referencedColumnNames: id
+            constraintName: fk_academy_admission_steps_academy
+            onDelete: CASCADE
+
+  # â”€â”€ academy_notable_alumni â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  - changeSet:
+      id: 010-14-create-academy-notable-alumni
+      author: Chiranjeevi D
+      preConditions:
+        onFail: MARK_RAN
+        not:
+          - tableExists:
+              tableName: academy_notable_alumni
+      changes:
+        - createTable:
+            tableName: academy_notable_alumni
+            columns:
+              - column:
+                  name: id
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: academy_id
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: name
+                  type: VARCHAR(100)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: achievement
+                  type: VARCHAR(300)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: year
+                  type: INTEGER
+              - column:
+                  name: sport
+                  type: VARCHAR(100)
+              - column:
+                  name: photo_uri
+                  type: VARCHAR(500)
+              - column:
+                  name: has_consent
+                  type: BOOLEAN
+                  defaultValueBoolean: false
+        - addForeignKeyConstraint:
+            baseTableName: academy_notable_alumni
+            baseColumnNames: academy_id
+            referencedTableName: academies
+            referencedColumnNames: id
+            constraintName: fk_academy_notable_alumni_academy
+            onDelete: CASCADE
+
+  # â”€â”€ academy_team_achievements â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  - changeSet:
+      id: 010-15-create-academy-team-achievements
+      author: Chiranjeevi D
+      preConditions:
+        onFail: MARK_RAN
+        not:
+          - tableExists:
+              tableName: academy_team_achievements
+      changes:
+        - createTable:
+            tableName: academy_team_achievements
+            columns:
+              - column:
+                  name: id
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: academy_id
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: title
+                  type: VARCHAR(200)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: organization
+                  type: VARCHAR(150)
+              - column:
+                  name: year
+                  type: INTEGER
+              - column:
+                  name: sport
+                  type: VARCHAR(100)
+              - column:
+                  name: proof_uri
+                  type: VARCHAR(500)
+        - addForeignKeyConstraint:
+            baseTableName: academy_team_achievements
+            baseColumnNames: academy_id
+            referencedTableName: academies
+            referencedColumnNames: id
+            constraintName: fk_academy_team_achievements_academy
+            onDelete: CASCADE
+
+  # â”€â”€ academy_affiliations â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  - changeSet:
+      id: 010-16-create-academy-affiliations
+      author: Chiranjeevi D
+      preConditions:
+        onFail: MARK_RAN
+        not:
+          - tableExists:
+              tableName: academy_affiliations
+      changes:
+        - createTable:
+            tableName: academy_affiliations
+            columns:
+              - column:
+                  name: id
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: academy_id
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: body
+                  type: VARCHAR(100)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: label
+                  type: VARCHAR(200)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: registration_number
+                  type: VARCHAR(100)
+              - column:
+                  name: document_uri
+                  type: VARCHAR(500)
+              - column:
+                  name: is_verified
+                  type: BOOLEAN
+                  defaultValueBoolean: false
+        - addForeignKeyConstraint:
+            baseTableName: academy_affiliations
+            baseColumnNames: academy_id
+            referencedTableName: academies
+            referencedColumnNames: id
+            constraintName: fk_academy_affiliations_academy
+            onDelete: CASCADE
+
+  # â”€â”€ academy_verification_logs â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  - changeSet:
+      id: 010-17-create-academy-verification-logs
+      author: Chiranjeevi D
+      preConditions:
+        onFail: MARK_RAN
+        not:
+          - tableExists:
+              tableName: academy_verification_logs
+      changes:
+        - createTable:
+            tableName: academy_verification_logs
+            columns:
+              - column:
+                  name: id
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: academy_id
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: stage
+                  type: VARCHAR(30)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: note
+                  type: VARCHAR(500)
+              - column:
+                  name: timestamp
+                  type: TIMESTAMP WITH TIME ZONE
+                  constraints:
+                    nullable: false
+              - column:
+                  name: actor_type
+                  type: VARCHAR(20)
+              - column:
+                  name: actor_name
+                  type: VARCHAR(100)
+        - addForeignKeyConstraint:
+            baseTableName: academy_verification_logs
+            baseColumnNames: academy_id
+            referencedTableName: academies
+            referencedColumnNames: id
+            constraintName: fk_academy_verification_logs_academy
+            onDelete: CASCADE

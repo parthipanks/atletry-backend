@@ -1,0 +1,594 @@
+﻿databaseChangeLog:
+
+  # â”€â”€ coaches â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  - changeSet:
+      id: 007-01-create-coaches
+      author: Chiranjeevi D
+      preConditions:
+        onFail: MARK_RAN
+        not:
+          - tableExists:
+              tableName: coaches
+      changes:
+        - createTable:
+            tableName: coaches
+            columns:
+              - column:
+                  name: id
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: owner_id
+                  type: BIGINT
+              - column:
+                  name: full_name
+                  type: VARCHAR(100)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: display_name
+                  type: VARCHAR(100)
+              - column:
+                  name: profile_photo_url
+                  type: VARCHAR(500)
+              - column:
+                  name: cover_photo_url
+                  type: VARCHAR(500)
+              - column:
+                  name: date_of_birth
+                  type: DATE
+              - column:
+                  name: gender
+                  type: VARCHAR(25)
+              - column:
+                  name: years_of_experience
+                  type: INTEGER
+                  defaultValueNumeric: 0
+              - column:
+                  name: bio
+                  type: TEXT
+              - column:
+                  name: tagline
+                  type: VARCHAR(200)
+              - column:
+                  name: phone
+                  type: VARCHAR(15)
+              - column:
+                  name: coaching_philosophy
+                  type: VARCHAR(30)
+              - column:
+                  name: philosophy_description
+                  type: TEXT
+              - column:
+                  name: primary_sport_id
+                  type: BIGINT
+              - column:
+                  name: coaches_female_athletes
+                  type: BOOLEAN
+                  defaultValueBoolean: true
+              - column:
+                  name: coaches_male_athletes
+                  type: BOOLEAN
+                  defaultValueBoolean: true
+              - column:
+                  name: coaches_mixed_groups
+                  type: BOOLEAN
+                  defaultValueBoolean: true
+              - column:
+                  name: travel_radius_km
+                  type: INTEGER
+              - column:
+                  name: travel_charges_type
+                  type: VARCHAR(20)
+              - column:
+                  name: travel_charge_per_km
+                  type: DECIMAL(10, 2)
+              - column:
+                  name: fixed_travel_charge
+                  type: DECIMAL(10, 2)
+              - column:
+                  name: highest_playing_level
+                  type: VARCHAR(20)
+              - column:
+                  name: has_first_aid_cert
+                  type: BOOLEAN
+                  defaultValueBoolean: false
+              - column:
+                  name: has_cpr_cert
+                  type: BOOLEAN
+                  defaultValueBoolean: false
+              - column:
+                  name: has_nutrition_cert
+                  type: BOOLEAN
+                  defaultValueBoolean: false
+              - column:
+                  name: has_sports_science_cert
+                  type: BOOLEAN
+                  defaultValueBoolean: false
+              - column:
+                  name: currency
+                  type: VARCHAR(10)
+                  defaultValue: INR
+              - column:
+                  name: base_hourly_rate
+                  type: DECIMAL(10, 2)
+              - column:
+                  name: trial_session_price
+                  type: DECIMAL(10, 2)
+              - column:
+                  name: trial_session_duration_minutes
+                  type: INTEGER
+              - column:
+                  name: group_session_price_min
+                  type: DECIMAL(10, 2)
+              - column:
+                  name: group_session_price_max
+                  type: DECIMAL(10, 2)
+              - column:
+                  name: gst_applicable
+                  type: BOOLEAN
+                  defaultValueBoolean: false
+              - column:
+                  name: gstin
+                  type: VARCHAR(20)
+              - column:
+                  name: pan_number
+                  type: VARCHAR(20)
+              - column:
+                  name: slot_duration_minutes
+                  type: INTEGER
+              - column:
+                  name: buffer_minutes
+                  type: INTEGER
+              - column:
+                  name: booking_lead_hours
+                  type: INTEGER
+              - column:
+                  name: advance_booking_days
+                  type: INTEGER
+              - column:
+                  name: is_on_vacation
+                  type: BOOLEAN
+                  defaultValueBoolean: false
+              - column:
+                  name: vacation_until
+                  type: DATE
+              - column:
+                  name: max_sessions_per_day
+                  type: INTEGER
+              - column:
+                  name: cancellation_policy
+                  type: VARCHAR(20)
+              - column:
+                  name: free_cancellation_hours
+                  type: INTEGER
+              - column:
+                  name: no_show_policy
+                  type: VARCHAR(25)
+              - column:
+                  name: late_arrival_grace_minutes
+                  type: INTEGER
+              - column:
+                  name: reschedule_free_before_hours
+                  type: INTEGER
+              - column:
+                  name: refund_timeline_days
+                  type: INTEGER
+              - column:
+                  name: code_of_conduct
+                  type: TEXT
+              - column:
+                  name: photo_video_consent
+                  type: VARCHAR(20)
+              - column:
+                  name: parental_consent_required
+                  type: BOOLEAN
+                  defaultValueBoolean: false
+              - column:
+                  name: pocso_consent
+                  type: BOOLEAN
+                  defaultValueBoolean: false
+              - column:
+                  name: pocso_consent_at
+                  type: TIMESTAMP WITH TIME ZONE
+              - column:
+                  name: background_check_status
+                  type: VARCHAR(20)
+                  defaultValue: NOT_STARTED
+              - column:
+                  name: background_check_completed_at
+                  type: TIMESTAMP WITH TIME ZONE
+              - column:
+                  name: code_of_conduct_accepted
+                  type: BOOLEAN
+                  defaultValueBoolean: false
+              - column:
+                  name: code_of_conduct_accepted_at
+                  type: TIMESTAMP WITH TIME ZONE
+              - column:
+                  name: approval_status
+                  type: VARCHAR(20)
+                  defaultValue: PENDING_APPROVAL
+                  constraints:
+                    nullable: false
+              - column:
+                  name: is_published
+                  type: BOOLEAN
+                  defaultValueBoolean: false
+              - column:
+                  name: is_active
+                  type: BOOLEAN
+                  defaultValueBoolean: true
+              - column:
+                  name: wizard_step
+                  type: INTEGER
+                  defaultValueNumeric: 1
+              - column:
+                  name: wizard_completion
+                  type: INTEGER
+                  defaultValueNumeric: 0
+              - column:
+                  name: approved_at
+                  type: TIMESTAMP WITH TIME ZONE
+              - column:
+                  name: rejected_at
+                  type: TIMESTAMP WITH TIME ZONE
+              - column:
+                  name: suspended_at
+                  type: TIMESTAMP WITH TIME ZONE
+              - column:
+                  name: verification_notes
+                  type: TEXT
+              - column:
+                  name: is_verified_coach
+                  type: BOOLEAN
+                  defaultValueBoolean: false
+              - column:
+                  name: avg_rating
+                  type: DECIMAL(3, 2)
+              - column:
+                  name: review_count
+                  type: INTEGER
+                  defaultValueNumeric: 0
+              - column:
+                  name: avg_response_minutes
+                  type: INTEGER
+              - column:
+                  name: response_rate_24h_pct
+                  type: INTEGER
+              - column:
+                  name: total_students_ever_coached
+                  type: INTEGER
+                  defaultValueNumeric: 0
+              - column:
+                  name: active_student_count
+                  type: INTEGER
+                  defaultValueNumeric: 0
+              - column:
+                  name: total_sessions_completed
+                  type: INTEGER
+                  defaultValueNumeric: 0
+              - column:
+                  name: student_retention_pct
+                  type: INTEGER
+              # Embedded: CoachBankingDetails
+              - column:
+                  name: bank_account_holder_name
+                  type: VARCHAR(100)
+              - column:
+                  name: bank_account_number_last4
+                  type: VARCHAR(4)
+              - column:
+                  name: bank_account_number_full
+                  type: VARCHAR(50)
+              - column:
+                  name: bank_ifsc_code
+                  type: VARCHAR(15)
+              - column:
+                  name: bank_name
+                  type: VARCHAR(100)
+              - column:
+                  name: bank_branch_name
+                  type: VARCHAR(100)
+              - column:
+                  name: bank_account_type
+                  type: VARCHAR(20)
+              - column:
+                  name: bank_upi_id
+                  type: VARCHAR(100)
+              - column:
+                  name: bank_penny_drop_verified
+                  type: BOOLEAN
+                  defaultValueBoolean: false
+              - column:
+                  name: bank_payout_eligible
+                  type: BOOLEAN
+                  defaultValueBoolean: false
+              # Embedded: CoachDocuments
+              - column:
+                  name: doc_id_type
+                  type: VARCHAR(30)
+              - column:
+                  name: doc_id_number
+                  type: VARCHAR(100)
+              - column:
+                  name: doc_id_front_uri
+                  type: VARCHAR(500)
+              - column:
+                  name: doc_id_back_uri
+                  type: VARCHAR(500)
+              - column:
+                  name: doc_pan_number
+                  type: VARCHAR(20)
+              - column:
+                  name: doc_pan_image_uri
+                  type: VARCHAR(500)
+              - column:
+                  name: doc_pan_verified
+                  type: BOOLEAN
+                  defaultValueBoolean: false
+              - column:
+                  name: doc_gstin
+                  type: VARCHAR(20)
+              - column:
+                  name: doc_gst_certificate_uri
+                  type: VARCHAR(500)
+              - column:
+                  name: doc_police_verification_uri
+                  type: VARCHAR(500)
+              - column:
+                  name: doc_police_verification_date
+                  type: DATE
+              - column:
+                  name: doc_first_aid_cert_uri
+                  type: VARCHAR(500)
+              - column:
+                  name: doc_insurance_uri
+                  type: VARCHAR(500)
+              - column:
+                  name: doc_agreement_signature_uri
+                  type: VARCHAR(500)
+              - column:
+                  name: doc_agreement_signed_at
+                  type: TIMESTAMP WITH TIME ZONE
+              - column:
+                  name: created_date
+                  type: TIMESTAMP WITH TIME ZONE
+                  constraints:
+                    nullable: false
+              - column:
+                  name: updated_date
+                  type: TIMESTAMP WITH TIME ZONE
+        - addForeignKeyConstraint:
+            baseTableName: coaches
+            baseColumnNames: owner_id
+            referencedTableName: users
+            referencedColumnNames: id
+            constraintName: fk_coaches_owner
+            onDelete: SET NULL
+        - addForeignKeyConstraint:
+            baseTableName: coaches
+            baseColumnNames: primary_sport_id
+            referencedTableName: sports
+            referencedColumnNames: id
+            constraintName: fk_coaches_primary_sport
+            onDelete: SET NULL
+
+  # â”€â”€ coach_languages â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  - changeSet:
+      id: 007-02-create-coach-languages
+      author: Chiranjeevi D
+      preConditions:
+        onFail: MARK_RAN
+        not:
+          - tableExists:
+              tableName: coach_languages
+      changes:
+        - createTable:
+            tableName: coach_languages
+            columns:
+              - column:
+                  name: coach_id
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: language
+                  type: VARCHAR(50)
+        - addForeignKeyConstraint:
+            baseTableName: coach_languages
+            baseColumnNames: coach_id
+            referencedTableName: coaches
+            referencedColumnNames: id
+            constraintName: fk_coach_languages_coach
+            onDelete: CASCADE
+
+  # â”€â”€ coach_specializations â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  - changeSet:
+      id: 007-03-create-coach-specializations
+      author: Chiranjeevi D
+      preConditions:
+        onFail: MARK_RAN
+        not:
+          - tableExists:
+              tableName: coach_specializations
+      changes:
+        - createTable:
+            tableName: coach_specializations
+            columns:
+              - column:
+                  name: coach_id
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: specialization
+                  type: VARCHAR(100)
+        - addForeignKeyConstraint:
+            baseTableName: coach_specializations
+            baseColumnNames: coach_id
+            referencedTableName: coaches
+            referencedColumnNames: id
+            constraintName: fk_coach_specializations_coach
+            onDelete: CASCADE
+
+  # â”€â”€ coach_levels_coached â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  - changeSet:
+      id: 007-04-create-coach-levels-coached
+      author: Chiranjeevi D
+      preConditions:
+        onFail: MARK_RAN
+        not:
+          - tableExists:
+              tableName: coach_levels_coached
+      changes:
+        - createTable:
+            tableName: coach_levels_coached
+            columns:
+              - column:
+                  name: coach_id
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: level
+                  type: VARCHAR(20)
+        - addForeignKeyConstraint:
+            baseTableName: coach_levels_coached
+            baseColumnNames: coach_id
+            referencedTableName: coaches
+            referencedColumnNames: id
+            constraintName: fk_coach_levels_coached_coach
+            onDelete: CASCADE
+
+  # â”€â”€ coach_age_groups_coached â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  - changeSet:
+      id: 007-05-create-coach-age-groups-coached
+      author: Chiranjeevi D
+      preConditions:
+        onFail: MARK_RAN
+        not:
+          - tableExists:
+              tableName: coach_age_groups_coached
+      changes:
+        - createTable:
+            tableName: coach_age_groups_coached
+            columns:
+              - column:
+                  name: coach_id
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: age_group
+                  type: VARCHAR(20)
+        - addForeignKeyConstraint:
+            baseTableName: coach_age_groups_coached
+            baseColumnNames: coach_id
+            referencedTableName: coaches
+            referencedColumnNames: id
+            constraintName: fk_coach_age_groups_coached_coach
+            onDelete: CASCADE
+
+  # â”€â”€ coach_training_modes â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  - changeSet:
+      id: 007-06-create-coach-training-modes
+      author: Chiranjeevi D
+      preConditions:
+        onFail: MARK_RAN
+        not:
+          - tableExists:
+              tableName: coach_training_modes
+      changes:
+        - createTable:
+            tableName: coach_training_modes
+            columns:
+              - column:
+                  name: coach_id
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: mode
+                  type: VARCHAR(25)
+        - addForeignKeyConstraint:
+            baseTableName: coach_training_modes
+            baseColumnNames: coach_id
+            referencedTableName: coaches
+            referencedColumnNames: id
+            constraintName: fk_coach_training_modes_coach
+            onDelete: CASCADE
+
+  # â”€â”€ coach_online_platforms â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  - changeSet:
+      id: 007-07-create-coach-online-platforms
+      author: Chiranjeevi D
+      preConditions:
+        onFail: MARK_RAN
+        not:
+          - tableExists:
+              tableName: coach_online_platforms
+      changes:
+        - createTable:
+            tableName: coach_online_platforms
+            columns:
+              - column:
+                  name: coach_id
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: platform
+                  type: VARCHAR(25)
+        - addForeignKeyConstraint:
+            baseTableName: coach_online_platforms
+            baseColumnNames: coach_id
+            referencedTableName: coaches
+            referencedColumnNames: id
+            constraintName: fk_coach_online_platforms_coach
+            onDelete: CASCADE
+
+  # â”€â”€ coach_secondary_sports â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  - changeSet:
+      id: 007-08-create-coach-secondary-sports
+      author: Chiranjeevi D
+      preConditions:
+        onFail: MARK_RAN
+        not:
+          - tableExists:
+              tableName: coach_secondary_sports
+      changes:
+        - createTable:
+            tableName: coach_secondary_sports
+            columns:
+              - column:
+                  name: coach_id
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: sport_id
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+        - addPrimaryKey:
+            tableName: coach_secondary_sports
+            columnNames: coach_id, sport_id
+            constraintName: pk_coach_secondary_sports
+        - addForeignKeyConstraint:
+            baseTableName: coach_secondary_sports
+            baseColumnNames: coach_id
+            referencedTableName: coaches
+            referencedColumnNames: id
+            constraintName: fk_coach_secondary_sports_coach
+            onDelete: CASCADE
+        - addForeignKeyConstraint:
+            baseTableName: coach_secondary_sports
+            baseColumnNames: sport_id
+            referencedTableName: sports
+            referencedColumnNames: id
+            constraintName: fk_coach_secondary_sports_sport
+            onDelete: CASCADE

@@ -1,0 +1,192 @@
+﻿databaseChangeLog:
+
+  # â”€â”€ tournaments â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  - changeSet:
+      id: 006-01-create-tournaments
+      author: Chiranjeevi D
+      preConditions:
+        onFail: MARK_RAN
+        not:
+          - tableExists:
+              tableName: tournaments
+      changes:
+        - createTable:
+            tableName: tournaments
+            columns:
+              - column:
+                  name: id
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: name
+                  type: VARCHAR(150)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: sport_id
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: format
+                  type: VARCHAR(100)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: entry_unit
+                  type: VARCHAR(20)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: max_slots
+                  type: INTEGER
+                  constraints:
+                    nullable: false
+              - column:
+                  name: entry_fee
+                  type: DECIMAL(10, 2)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: prize_pool
+                  type: DECIMAL(12, 2)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: starts_at
+                  type: DATE
+                  constraints:
+                    nullable: false
+              - column:
+                  name: registration_deadline
+                  type: TIMESTAMP WITH TIME ZONE
+                  constraints:
+                    nullable: false
+              - column:
+                  name: status
+                  type: VARCHAR(20)
+                  defaultValue: PENDING_APPROVAL
+                  constraints:
+                    nullable: false
+              - column:
+                  name: created_by
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: created_date
+                  type: TIMESTAMP WITH TIME ZONE
+                  constraints:
+                    nullable: false
+              - column:
+                  name: updated_date
+                  type: TIMESTAMP WITH TIME ZONE
+        - addForeignKeyConstraint:
+            baseTableName: tournaments
+            baseColumnNames: sport_id
+            referencedTableName: sports
+            referencedColumnNames: id
+            constraintName: fk_tournaments_sport
+            onDelete: RESTRICT
+        - addForeignKeyConstraint:
+            baseTableName: tournaments
+            baseColumnNames: created_by
+            referencedTableName: users
+            referencedColumnNames: id
+            constraintName: fk_tournaments_created_by
+            onDelete: RESTRICT
+
+  # â”€â”€ tournament_images â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  - changeSet:
+      id: 006-02-create-tournament-images
+      author: Chiranjeevi D
+      preConditions:
+        onFail: MARK_RAN
+        not:
+          - tableExists:
+              tableName: tournament_images
+      changes:
+        - createTable:
+            tableName: tournament_images
+            columns:
+              - column:
+                  name: tournament_id
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: image_url
+                  type: VARCHAR(500)
+              - column:
+                  name: sort_order
+                  type: INTEGER
+        - addForeignKeyConstraint:
+            baseTableName: tournament_images
+            baseColumnNames: tournament_id
+            referencedTableName: tournaments
+            referencedColumnNames: id
+            constraintName: fk_tournament_images_tournament
+            onDelete: CASCADE
+
+  # â”€â”€ tournament_registrations â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  - changeSet:
+      id: 006-03-create-tournament-registrations
+      author: Chiranjeevi D
+      preConditions:
+        onFail: MARK_RAN
+        not:
+          - tableExists:
+              tableName: tournament_registrations
+      changes:
+        - createTable:
+            tableName: tournament_registrations
+            columns:
+              - column:
+                  name: id
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: tournament_id
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: user_id
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: team_name
+                  type: VARCHAR(100)
+              - column:
+                  name: created_date
+                  type: TIMESTAMP WITH TIME ZONE
+                  constraints:
+                    nullable: false
+              - column:
+                  name: updated_date
+                  type: TIMESTAMP WITH TIME ZONE
+        - addUniqueConstraint:
+            tableName: tournament_registrations
+            columnNames: tournament_id, user_id
+            constraintName: uq_tournament_registrations_tournament_user
+        - addForeignKeyConstraint:
+            baseTableName: tournament_registrations
+            baseColumnNames: tournament_id
+            referencedTableName: tournaments
+            referencedColumnNames: id
+            constraintName: fk_tournament_registrations_tournament
+            onDelete: CASCADE
+        - addForeignKeyConstraint:
+            baseTableName: tournament_registrations
+            baseColumnNames: user_id
+            referencedTableName: users
+            referencedColumnNames: id
+            constraintName: fk_tournament_registrations_user
+            onDelete: CASCADE
