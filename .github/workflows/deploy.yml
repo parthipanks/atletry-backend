@@ -26,37 +26,29 @@ jobs:
 
       - name: Build Docker Image
         run: |
-          docker build -t atletry-backend .
+          docker build -t atletry-backend:latest .
 
       - name: Tag Docker Image
         run: |
-          docker tag atletry-backend:latest ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/atletry-backend:latest
+          docker tag atletry-backend:latest \
+          ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/atletry-backend:latest
 
       - name: Push Docker Image
         run: |
-          docker push ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/atletry-backend:latest
+          docker push \
+          ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/atletry-backend:latest
 
       - name: Deploy to EC2
-        uses: appleboy/ssh-action@v1.0.3
+        uses: appleboy/ssh-action@v1.2.0
         with:
           host: ${{ secrets.EC2_HOST }}
           username: ${{ secrets.EC2_USERNAME }}
           key: ${{ secrets.EC2_SSH_KEY }}
           script: |
-            aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.us-east-1.amazonaws.com
+            cd ~/atletry-backend
 
-            docker pull ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.us-east-1.amazonaws.com/atletry-backend:latest
+            aws ecr get-login-password --region ${{ secrets.AWS_REGION }} | docker login --username AWS --password-stdin ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com
 
-            docker stop atletry || true
-            docker rm atletry || true
+            docker compose pull
 
-            docker run -d \
-              --name atletry \
-              --network atletry-network \
-              -p 8080:8080 \
-              -e SPRING_PROFILES_ACTIVE=dev \
-              -e DB_URL=jdbc:postgresql://postgres:5432/atletry \
-              -e DB_USERNAME=postgres \
-              -e DB_PASSWORD=admin \
-              -e JWT_SECRET=YWxlcnRyeS1zdXBlci1zZWNyZXQta2V5LW11c3QtYmUtYXQtbGVhc3QtMjU2LWJpdHM= \
-              ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.us-east-1.amazonaws.com/atletry-backend:latest
+            docker compose up -d
